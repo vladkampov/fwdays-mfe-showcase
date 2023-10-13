@@ -1,0 +1,13 @@
+# deps
+node_modules/
+packages/**/node_modules/
+
+# IDE
+.idea
+.vscode
+
+# Logs
+*.log
+
+# Misc
+.DS_Store
