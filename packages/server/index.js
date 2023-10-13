@@ -1,6 +1,6 @@
-import express from "express";
-import cors from "cors";
-import merge from "lodash.merge";
+const express = require("express");
+const cors = require("cors");
+const merge = require("lodash.merge");
 
 const app = express();
 
