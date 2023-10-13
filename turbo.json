@@ -3,7 +3,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["packages/**/dist"]
+      "outputs": ["packages/root/dist", "packages/mfe1/dist", "packages/mfe2/dist", "packages/header/dist"]
     },
     "deploy": {
       "dependsOn": ["build", "lint"]
