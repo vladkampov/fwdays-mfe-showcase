@@ -36,12 +36,12 @@ app.get("/bundles", (req, res) => {
 
   if (req.query.overrides) {
     try {
-      const overridesObj = JSON.parse(req.query.overrides);
+      const overridesObj = JSON.parse(decodeURI(req.query.overrides));
 
       if (overridesObj.bundles) {
         res.json(
           JSON.stringify({
-            imports: marge(baseConfig, overridesObj.bundles),
+            imports: merge(baseConfig, overridesObj.bundles),
           })
         );
       }
