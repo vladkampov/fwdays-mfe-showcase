@@ -26,8 +26,14 @@ export const FeatureTogglesProvider: React.FC<React.PropsWithChildren<{}>> = ({
       toggles: {},
     });
 
+  const isDev = window.location.hostname === "localhost";
+
   useEffect(() => {
-    fetch("//localhost:9004/feature-toggles")
+    fetch(
+      isDev
+        ? "//localhost:9004/feature-toggles"
+        : "//fwdays-mfe-showcase-server.vercel.app/feature-toggles"
+    )
       .then((res) => res.json())
       .then((config) => setFeatureTogglesConfig(withOverrides(config)));
   }, []);
