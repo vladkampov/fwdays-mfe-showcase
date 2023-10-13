@@ -8,12 +8,16 @@
   "private": true,
   "scripts": {
     "start": "concurrently \"yarn workspace @kampov/header start\" \"yarn workspace @kampov/mfe1 start\" \"yarn workspace @kampov/mfe2 start\" \"yarn workspace @kampov/root-config start\" \"yarn workspace @kampov/server start\" ",
-    "lint": "eslint ./packages/**/src --ext js,ts,tsx"
+    "lint": "eslint ./packages/**/src --ext js,ts,tsx",
+    "turbo": "turbo"
   },
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
     "concurrently": "^6.2.1"
+  },
+  "dependencies": {
+    "turbo": "^1.10.15"
   }
 }

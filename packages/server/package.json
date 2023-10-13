@@ -2,7 +2,8 @@
   "name": "@kampov/server",
   "version": "0.0.1",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "echo \"Don't build it\""
   },
   "dependencies": {
     "cors": "^2.8.5",
