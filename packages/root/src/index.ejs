@@ -42,7 +42,13 @@
   </script>
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js" as="script">
 
-  <% if (isLocal) { %>
+
+  <!--
+    If you need to support Angular applications, uncomment the script tag below to ensure only one instance of ZoneJS is loaded
+    Learn more about why at https://single-spa.js.org/docs/ecosystem-angular/#zonejs
+  -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/zone.js@0.11.3/dist/zone.min.js"></script> -->
+
     <script type="systemjs-importmap">
       {
         "imports": {
@@ -54,14 +60,6 @@
         }
       }
     </script>
-  <% } %>
-
-  <!--
-    If you need to support Angular applications, uncomment the script tag below to ensure only one instance of ZoneJS is loaded
-    Learn more about why at https://single-spa.js.org/docs/ecosystem-angular/#zonejs
-  -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/zone.js@0.11.3/dist/zone.min.js"></script> -->
-
   <script src="https://cdn.jsdelivr.net/npm/import-map-overrides@2.2.0/dist/import-map-overrides.js"></script>
   <% if (isLocal) { %>
   <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/system.js"></script>
@@ -77,22 +75,9 @@
     You need to enable JavaScript to run this app.
   </noscript>
   <% if (isLocal) { %>
-  <script>
-    fetch("//localhost:9004/bundles" + window.location.search).then(res => res.json()).then((importMap) => {
-      var s = document.createElement('script');
-      s.type = 'systemjs-importmap';
-
-      try {
-        s.appendChild(document.createTextNode(importMap));
-        document.body.appendChild(s);
-      } catch (e) {
-        s.text = importMap;
-        document.body.appendChild(s);
-      }
-
+    <script>
       System.import('@kampov/root-config');
-    })
-  </script>
+    </script>
   <% } else { %>
     <script>
       fetch("//fwdays-mfe-showcase-server.vercel.app/bundles" + window.location.search).then(res => res.json()).then((importMap) => {
@@ -100,10 +85,10 @@
         s.type = 'systemjs-importmap';
 
         try {
-          s.appendChild(document.createTextNode(importMap));
+          s.appendChild(document.createTextNode(JSON.stringify(importMap)));
           document.body.appendChild(s);
         } catch (e) {
-          s.text = importMap;
+          s.text = JSON.stringify(importMap);
           document.body.appendChild(s);
         }
 
