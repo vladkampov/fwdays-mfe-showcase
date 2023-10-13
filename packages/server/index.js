@@ -28,7 +28,11 @@ app.get("/bundles", (req, res) => {
       const overridesObj = JSON.parse(req.query.overrides);
 
       if (overridesObj.bundles) {
-        res.json(JSON.stringify(overridesObj.bundles));
+        res.json(
+          JSON.stringify({
+            imports: overridesObj.bundles,
+          })
+        );
       }
     } catch (err) {
       // eslint-disable-next-line no-console
