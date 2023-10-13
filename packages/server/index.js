@@ -16,6 +16,17 @@ app.use(
 const PORT = process.env.PORT || 9004;
 
 app.get("/bundles", (req, res) => {
+  const baseConfig = {
+    "@single-spa/welcome":
+      "https://unpkg.com/single-spa-welcome/dist/single-spa-welcome.js",
+    "@kampov/root-config":
+      "//fwdays-mfe-showcase.vercel.app/kampov-root-config.js",
+    "@kampov/header":
+      "//fwdays-mfe-showcase-header.vercel.app/kampov-header.js",
+    "@kampov/mfe1": "//fwdays-mfe-showcase-mfe1.vercel.app/kampov-mfe1.js",
+    "@kampov/mfe2": "//fwdays-mfe-showcase-mfe2.vercel.app/kampov-mfe2.js",
+  };
+
   const overridesStr = new URLSearchParams(req.se).get("overrides");
 
   if (overridesStr) {
@@ -30,7 +41,7 @@ app.get("/bundles", (req, res) => {
       if (overridesObj.bundles) {
         res.json(
           JSON.stringify({
-            imports: overridesObj.bundles,
+            imports: marge(baseConfig, overridesObj.bundles),
           })
         );
       }
@@ -41,7 +52,7 @@ app.get("/bundles", (req, res) => {
   }
 
   res.json({
-    imports: {},
+    imports: merge(baseConfig, {}),
   });
 });
 
