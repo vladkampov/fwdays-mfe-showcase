@@ -4,7 +4,6 @@ const FeatureTogglesContext = createContext(null);
 
 type FeatureTogglesConfig = {
   toggles: Record<string, boolean>;
-  bundles: Record<string, string>;
 };
 
 function withOverrides(config) {
@@ -25,7 +24,6 @@ export const FeatureTogglesProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const [featureTogglesConfig, setFeatureTogglesConfig] =
     useState<FeatureTogglesConfig>({
       toggles: {},
-      bundles: {},
     });
 
   useEffect(() => {

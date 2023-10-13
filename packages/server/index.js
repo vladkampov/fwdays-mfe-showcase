@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import merge from "lodash.merge";
 
 const app = express();
 
@@ -14,16 +15,36 @@ app.use(
 
 const PORT = process.env.PORT || 9004;
 
+app.get("/bundles", (req, res) => {
+  const overridesStr = new URLSearchParams(req.se).get("overrides");
+
+  if (overridesStr) {
+    const overrides = JSON.parse(overridesStr);
+    return merge(config, overrides);
+  }
+
+  if (req.query.overrides) {
+    try {
+      const overridesObj = JSON.parse(req.query.overrides);
+
+      if (overridesObj.bundles) {
+        res.json(JSON.stringify(overridesObj.bundles));
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log("unable to parse overrides as a json");
+    }
+  }
+
+  res.json({
+    imports: {},
+  });
+});
+
 app.get("/feature-toggles", (req, res) => {
   res.json({
     toggles: {
       newCardDesign: false,
-    },
-    bundles: {
-      header: "//localhost:9001/kampov-header.js",
-      mfe1: "//localhost:9002/kampov-mfe1.js",
-      mfe2: "//localhost:9003/kampov-mfe2.js",
-      "root-config": "//localhost:9000/kampov-root-config.js",
     },
   });
 });
