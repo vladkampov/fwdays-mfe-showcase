@@ -16,7 +16,7 @@ jobs:
       - name: List Changed Folders
         id: list-changed-folders
         run: |
-          changed_folders=$(git diff --name-only ${{ github.base_ref }}...${{ github.head_ref }} | grep '^packages/' | cut -d/ -f2 | sort -u)
+          changed_folders=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} | grep '^packages/' | cut -d/ -f2 | sort -u)
           echo "::set-output name=changed_folders::$changed_folders"
 
       - name: Generate Links
