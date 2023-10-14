@@ -28,9 +28,11 @@ export default function Root(props) {
   console.log("These are feature toggles: ", featureToggles);
 
   const isNewCardDesignEnabled = featureToggles.toggles["newCardDesign"];
+  const isNewGorillaEnabled = featureToggles.toggles["newGorilla"];
 
   return (
     <section>
+      {isNewGorillaEnabled && <p>🤡</p>}
       {isNewCardDesignEnabled ? (
         <Row gutter={16}>
           {data.map(({ img, title, description }) => (
