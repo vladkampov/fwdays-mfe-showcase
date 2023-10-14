@@ -13,18 +13,21 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: List Changed Folders
-        id: list-changed-folders
+      - name: Get Changed Files
+        id: get-changed-files
         run: |
-          changed_folders=$(git diff --name-only ${{ github.base_ref }}..${{ github.head_ref }} | grep '^packages/' | cut -d/ -f2 | sort -u)
-          echo "::set-output name=changed_folders::$changed_folders"
+          changed_files=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
+              | jq -r '.[].filename' | grep '^packages/')
+          echo "::set-output name=changed_files::$changed_files"
 
       - name: Generate Links
         id: generate-links
         run: |
           links=""
-          for folder in ${{ steps.list-changed-folders.outputs.changed_folders }}; do
-            branch_name=$(git rev-parse --abbrev-ref HEAD | sed 's/[^a-zA-Z0-9]//g' | tr '[:upper:]' '[:lower:]')
+          for file in ${{ steps.get-changed-files.outputs.changed_files }}; do
+            folder=$(dirname "$file" | cut -d/ -f2)
+            branch_name=$(echo "${{ github.head_ref }}" | sed 's/[^a-zA-Z0-9]//g' | tr '[:upper:]' '[:lower:]')
             link="https://fwdays-mfe-showcase-${folder}-git-${branch_name}-vlad-kampov-s-team.vercel.app"
             links="${links}\n\"@kampov/${folder}\": \"${link}/kampov-${folder}.js\","
           done
@@ -33,4 +36,39 @@ jobs:
       - name: Generate JSON
         id: generate-json
         run: |
-          echo "{\"bundles\": {${{ steps.generate-links.outputs.links }} }}" > bundles.json
+          echo "{\"bundles\": {${{ steps.generate-links.outputs.links% }} }}" > bundles.json
+
+      - name: URL Encode JSON
+        id: url-encode-json
+        run: |
+          encoded_json=$(cat bundles.json | jq -R . | jq -s .)
+          echo "::set-output name=encoded_json::$encoded_json"
+
+      - name: Comment on PR
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const encodedJson = '${{ steps.url-encode-json.outputs.encoded_json }}';
+            const body = `The bundles JSON has been generated. See [bundles.json](bundles.json).`;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Upload JSON
+        uses: actions/upload-artifact@v2
+        with:
+          name: bundles-json
+          path: bundles.json
+
+      - name: Set Output URL
+        id: set-output-url
+        run: |
+          output_url="https://fwdays-mfe-showcase.vercel.app/?overrides=${{ steps.url-encode-json.outputs.encoded_json }}"
+          echo "::set-output name=output_url::$output_url"
+
+      - name: Output URL
+        run: echo "${{ steps.set-output-url.outputs.output_url }}"
