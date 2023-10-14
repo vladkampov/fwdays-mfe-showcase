@@ -33,12 +33,12 @@ jobs:
       - name: Generate JSON
         id: generate-json
         run: |
-          echo "{\"bundles\": {${{ steps.generate-links.outputs.links%,}}}}" > bundles.json
+          echo "{\"bundles\": {${{ steps.generate-links.outputs.links% }} }}" > bundles.json
 
       - name: URL Encode JSON
         id: url-encode-json
         run: |
-          encoded_json=$(cat bundles.json | jq -r @uri)
+          encoded_json=$(cat bundles.json | jq -R . | jq -s .)
           echo "::set-output name=encoded_json::$encoded_json"
 
       - name: Comment on PR
