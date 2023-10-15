@@ -51,6 +51,7 @@ app.get("/feature-toggles", (req, res) => {
   res.json({
     toggles: {
       newCardDesign: false,
+      gorillaAppreciator: false,
     },
   });
 });
