@@ -27,7 +27,7 @@ app.get("/bundles", (req, res) => {
     "@kampov/mfe2": "//fwdays-mfe-showcase-mfe2.vercel.app/kampov-mfe2.js",
   };
 
-  const overridesStr = new URLSearchParams(req.se).get("overrides");
+  const overridesStr = new URLSearchParams(req.search).get("overrides");
 
   if (overridesStr) {
     const overrides = JSON.parse(overridesStr);
