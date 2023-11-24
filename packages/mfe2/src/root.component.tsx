@@ -3,23 +3,24 @@ import zsu from "./img/zsu.png";
 import gepete from "./img/gepete.png";
 import shitiknow from "./img/shitiknow.png";
 import gorillaImg from "./img/gorilla.jpg";
+import cepibula from "./img/cepibula.png";
 import { useFeatureToggles } from "./featureTogglesContext";
 
 const data = [
   {
-    title: "Чи можна їсти Олів'є?",
-    img: shitiknow,
-    description: "Давайте спитаємо Щіт ай ноу Live",
+    title: "Jaka k***a cepibula?",
+    img: cepibula,
+    description: "Do you actually now this meme?",
   },
   {
-    title: "Послухайте Подкаст ЖеПеТе",
+    title: "Listen to Podcast ЖеПеТе",
     img: gepete,
-    description: "Ну Будь ласка",
+    description: "Please",
   },
   {
-    title: "Давайте донатити на ЗСУ",
+    title: "Please donate for Ukraine",
     img: zsu,
-    description: "Терміново!",
+    description: "ASAP!",
   },
 ];
 export default function Root(props) {
@@ -30,7 +31,6 @@ export default function Root(props) {
 
   const isNewCardDesignEnabled = featureToggles.toggles["newCardDesign"];
   const isGorillaAppreciator = featureToggles.toggles["gorillaAppreciator"];
-
   return (
     <section>
       {isGorillaAppreciator && (

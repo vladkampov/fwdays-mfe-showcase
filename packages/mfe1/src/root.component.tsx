@@ -3,23 +3,21 @@ import { Timeline, Typography } from "antd";
 export default function Root(props) {
   return (
     <div>
-      <Typography.Title level={3}>
-        Як готуватись до презентацій?
-      </Typography.Title>
+      <Typography.Title level={3}>How to prepare for the talk</Typography.Title>
       <Timeline
         items={[
           {
-            children: "Анжуманія",
+            children: "Eath breakfast",
           },
           {
-            children: "Прес качат",
+            children: "Do some push ups",
           },
           {
-            children: "Бегіт",
+            children: "Actually write code",
           },
           {
             color: "green",
-            children: "Обняти горилу",
+            children: "Embrace the audience",
           },
         ]}
       />

@@ -103,5 +103,57 @@
     }
   </style>
   <import-map-overrides-full show-when-local-storage="devtools" dev-libs></import-map-overrides-full>
+  <script>
+    async function debugPanel(){
+      const isDebug = new URLSearchParams(window.location.search).has('debug');
+
+      if (!isDebug) {
+        return
+      }
+
+      const isDev = window.location.hostname === "localhost";
+      const overridesPanel =isDev
+              ? "//localhost:9004/feature-toggles"
+              : "//fwdays-mfe-showcase-server.vercel.app/feature-toggles"
+
+      const res = await fetch(overridesPanel)
+      const overrides = await res.json()
+
+      const debugDiv = document.createElement('div');
+      debugDiv.style.position = 'fixed';
+      debugDiv.style.top = '0';
+      debugDiv.style.right = '0';
+      debugDiv.style.backgroundColor = 'white';
+      debugDiv.style.padding = '12px';
+      debugDiv.style.border = '1px solid black';
+      Object.keys(overrides.toggles).forEach(key => {
+        const div = document.createElement('div');
+        const isEnabled = !!overrides[key];
+        const a = document.createElement('a');
+        a.href = ''
+        a.innerText = isEnabled ? 'Disable' : 'Enable'
+        a.onclick = (e) => {
+          e.preventDefault();
+          const searchParams = new URLSearchParams(window.location.search)
+
+          const overrides = JSON.parse(searchParams.get('overrides') || '{}');
+
+          searchParams.set('overrides', JSON.stringify({ ...overrides, toggles: { ...(overrides.toggles ||  {}) ,[key]: !isEnabled }}))
+          const url = window.location.origin + window.location.pathname + '?' + searchParams.toString();
+          window.location.replace(url)
+        }
+        const p = document.createElement('p');
+        const span = document.createElement('span');
+        span.innerText = `${key}: `;
+        p.appendChild(span)
+        p.appendChild(a)
+        div.append(p)
+        debugDiv.appendChild(div)
+
+        document.body.append(debugDiv)
+      })
+    }
+    debugPanel()
+  </script>
 </body>
 </html>
